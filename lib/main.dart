@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -47,9 +47,9 @@ class MainPageState extends State<MainPage> {
       body: _pageOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.feed), label: 'Feed'),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Friends'),
-          BottomNavigationBarItem(icon: Icon(Icons.folder), label: 'My Files'),
+          BottomNavigationBarItem(icon: Icon(Icons.feed), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.folder), label: ''),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -172,7 +172,7 @@ class FriendChatPageState extends State<FriendChatPage> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: const InputDecoration(hintText: 'Type a message...'),
+                    decoration: const InputDecoration(hintText: ''),
                   ),
                 ),
                 IconButton(
