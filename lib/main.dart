@@ -58,3 +58,58 @@ class MainPageState extends State<MainPage> {
   }
 }
 
+class FeedPage extends StatelessWidget {
+  const FeedPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Feed')),
+      body: ListView.builder(
+        itemCount: 2,
+        itemBuilder: (context, index) {
+          return FriendPost(
+            friendNumber: index + 1,
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FriendChatPage(friendNumber: index + 1),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+  const MyFilesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Files'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              // Add new image
+            },
+          ),
+        ],
+      ),
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1,
+        ),
+        itemCount: 9,
+        itemBuilder: (context, index) {
+          return Card(
+            child: Image.network('https://picsum.photos/200/200?random=${index + 10}'),
+          );
+        },
+      ),
+    );
+  }
+}
