@@ -82,6 +82,33 @@ class FeedPage extends StatelessWidget {
     );
   }
 }
+
+class FriendPost extends StatelessWidget {
+  final int friendNumber;
+  final VoidCallback onPressed;
+
+  const FriendPost({super.key, required this.friendNumber, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: Text('Friend $friendNumber'),
+            trailing: IconButton(
+              icon: const Icon(Icons.message),
+              onPressed: onPressed,
+            ),
+          ),
+          Image.network('https://picsum.photos/200/200?random=$friendNumber'),
+        ],
+      ),
+    );
+  }
+}
+
   const MyFilesPage({super.key});
 
   @override
