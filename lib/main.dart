@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
 
-class FriendPostPage extends StatelessWidget {
-  final List<String> friendPosts;
+void main() {
+  runApp(const MyApp());
+}
 
-  FriendPostPage({required this.friendPosts});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Social Media App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MainPage(),
+    );
+  }
+}
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  MainPageState createState() => MainPageState();
+}
+
+
+  const MyFilesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
