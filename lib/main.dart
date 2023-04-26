@@ -138,32 +138,52 @@ class FriendListPage extends StatelessWidget {
   }
 }
 
-  const MyFilesPage({super.key});
+class FriendChatPage extends StatefulWidget {
+  final int friendNumber;
+
+  const FriendChatPage({super.key, required this.friendNumber});
+
+  @override
+  FriendChatPageState createState() => FriendChatPageState();
+}
+
+class FriendChatPageState extends State<FriendChatPage> {
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Files'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-            },
+        title: Text('Friend ${widget.friendNumber}'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: const InputDecoration(hintText: 'Type a message...'),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                  },
+                ),
+              ],
+            ),
           ),
         ],
-      ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 1,
-        ),
-        itemCount: 9,
-        itemBuilder: (context, index) {
-          return Card(
-            child: Image.network('https://picsum.photos/200/200?random=${index + 10}'),
-          );
-        },
       ),
     );
   }
