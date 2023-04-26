@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -90,7 +92,8 @@ class FriendPost extends StatelessWidget {
   final int friendNumber;
   final VoidCallback onPressed;
 
-  const FriendPost({super.key, required this.friendNumber, required this.onPressed});
+  const FriendPost({Key? key, required this.friendNumber, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +101,7 @@ class FriendPost extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
+            contentPadding: const EdgeInsets.all(8.0),
             leading: const Icon(Icons.person),
             title: Text('Friend $friendNumber'),
             trailing: IconButton(
@@ -113,7 +117,7 @@ class FriendPost extends StatelessWidget {
 }
 
 class FriendListPage extends StatelessWidget {
-  const FriendListPage({super.key});
+  const FriendListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +127,7 @@ class FriendListPage extends StatelessWidget {
         itemCount: 3,
         itemBuilder: (context, index) {
           return ListTile(
+            contentPadding: const EdgeInsets.all(8.0),
             leading: const Icon(Icons.person),
             title: Text('Friend ${index + 1}'),
             trailing: IconButton(
@@ -166,7 +171,7 @@ class FriendChatPageState extends State<FriendChatPage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView(), 
+            child: ListView(),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -216,6 +221,7 @@ class MyFilesPage extends StatelessWidget {
         itemCount: 9,
         itemBuilder: (context, index) {
           return Card(
+            margin: const EdgeInsets.all(4.0),
             child: Image.network('https://picsum.photos/200/200?random=${index + 10}'),
           );
         },
