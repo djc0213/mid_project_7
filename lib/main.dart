@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -163,7 +163,7 @@ class FriendChatPageState extends State<FriendChatPage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView(),
+            child: ListView(), 
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -184,6 +184,38 @@ class FriendChatPageState extends State<FriendChatPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MyFilesPage extends StatelessWidget {
+  const MyFilesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Files'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+            },
+          ),
+        ],
+      ),
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1,
+        ),
+        itemCount: 9,
+        itemBuilder: (context, index) {
+          return Card(
+            child: Image.network('https://picsum.photos/200/200?random=${index + 10}'),
+          );
+        },
       ),
     );
   }
