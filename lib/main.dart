@@ -109,6 +109,35 @@ class FriendPost extends StatelessWidget {
   }
 }
 
+class FriendListPage extends StatelessWidget {
+  const FriendListPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Friend List')),
+      body: ListView.builder(
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: const Icon(Icons.person),
+            title: Text('Friend ${index + 1}'),
+            trailing: IconButton(
+              icon: const Icon(Icons.message),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FriendChatPage(friendNumber: index + 1),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
   const MyFilesPage({super.key});
 
   @override
@@ -120,7 +149,6 @@ class FriendPost extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              // Add new image
             },
           ),
         ],
