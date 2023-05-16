@@ -40,6 +40,18 @@ class VideoPost extends Post {
 }
 
 void main() {
+  String imagePostJson = '{"author": "John", "content": "Hello, world!", "imageUrl": "https://example.com/image.jpg"}';
+  Map<String, dynamic> imagePostData = jsonDecode(imagePostJson);
+  ImagePost imagePost = ImagePost.fromJson(imagePostData);
+  print('Image Post - Author: ${imagePost.author}, Content: ${imagePost.content}, Image URL: ${imagePost.imageUrl}');
+
+  String videoPostJson = '{"author": "Doe", "content": "Hello, Flutter!", "videoUrl": "https://example.com/video.mp4"}';
+  Map<String, dynamic> videoPostData = jsonDecode(videoPostJson);
+  VideoPost videoPost = VideoPost.fromJson(videoPostData);
+  print('Video Post - Author: ${videoPost.author}, Content: ${videoPost.content}, Video URL: ${videoPost.videoUrl}');
+}
+
+void main() {
   runApp(const MyApp());
 }
 
