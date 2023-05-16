@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-
 abstract class Post {
   final String author;
   final String content;
 
   Post({required this.author, required this.content});
-
-  static Post fromJson(Map<String, dynamic> json);
 }
 
 class ImagePost extends Post {
@@ -94,16 +91,30 @@ class VideoPost extends Post {
   }
 }
 
-void main() {
-  String imagePostJson = '{"author": "John", "content": "Hello, world!", "imageUrl": "https://example.com/image.jpg"}';
-  Map<String, dynamic> imagePostData = jsonDecode(imagePostJson);
-  ImagePost imagePost = ImagePost.fromJson(imagePostData);
-  print('Image Post - Author: ${imagePost.author}, Content: ${imagePost.content}, Image URL: ${imagePost.imageUrl}');
+void main() async {
+  ImagePost imagePost = ImagePost(
+    author: 'Author1',
+    content: 'This is a sample post',
+    imageUrl: 'https://example.com/image.jpg',
+  );
+  await ImagePost.saveInstance(imagePost);
+  
+  ImagePost? loadedImagePost = await ImagePost.readInstance();
+  if (loadedImagePost != null) {
+    print('Loaded Image Post - Author: ${loadedImagePost.author}, Content: ${loadedImagePost.content}, Image URL: ${loadedImagePost.imageUrl}');
+  }
 
-  String videoPostJson = '{"author": "Doe", "content": "Hello, Flutter!", "videoUrl": "https://example.com/video.mp4"}';
-  Map<String, dynamic> videoPostData = jsonDecode(videoPostJson);
-  VideoPost videoPost = VideoPost.fromJson(videoPostData);
-  print('Video Post - Author: ${videoPost.author}, Content: ${videoPost.content}, Video URL: ${videoPost.videoUrl}');
+  VideoPost videoPost = VideoPost(
+    author: 'Author2',
+    content: 'This is another sample post',
+    videoUrl: 'https://example.com/video.mp4',
+  );
+  await VideoPost.saveInstance(videoPost);
+
+  VideoPost? loadedVideoPost = await VideoPost.readInstance();
+  if (loadedVideoPost != null) {
+    print('Loaded Video Post - Author: ${loadedVideoPost.author}, Content: ${loadedVideoPost.content}, Video URL: ${loadedVideoPost.videoUrl}');
+  }
 }
 
 void main() {
