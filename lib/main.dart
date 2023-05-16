@@ -1,5 +1,44 @@
 import 'package:flutter/material.dart';
 
+abstract class Post {
+  final String author;
+  final String content;
+
+  Post({required this.author, required this.content});
+
+  static Post fromJson(Map<String, dynamic> json);
+}
+
+class ImagePost extends Post {
+  final String imageUrl;
+
+  ImagePost({required String author, required String content, required this.imageUrl})
+      : super(author: author, content: content);
+
+  static ImagePost fromJson(Map<String, dynamic> json) {
+    return ImagePost(
+      author: json['author'],
+      content: json['content'],
+      imageUrl: json['imageUrl'],
+    );
+  }
+}
+
+class VideoPost extends Post {
+  final String videoUrl;
+
+  VideoPost({required String author, required String content, required this.videoUrl})
+      : super(author: author, content: content);
+
+  static VideoPost fromJson(Map<String, dynamic> json) {
+    return VideoPost(
+      author: json['author'],
+      content: json['content'],
+      videoUrl: json['videoUrl'],
+    );
+  }
+}
+
 void main() {
   runApp(const MyApp());
 }
