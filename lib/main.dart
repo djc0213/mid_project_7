@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
 
 abstract class Post {
   final String author;
@@ -22,6 +25,32 @@ class ImagePost extends Post {
       imageUrl: json['imageUrl'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'author': author,
+      'content': content,
+      'imageUrl': imageUrl,
+    };
+  }
+
+  static Future<void> saveInstance(ImagePost imagePost) async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonData = jsonEncode(imagePost.toJson());
+    prefs.setString('imagePost', jsonData);
+  }
+
+  static Future<ImagePost?> readInstance() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('imagePost')) {
+      final jsonData = prefs.getString('imagePost');
+      if (jsonData != null) {
+        final json = jsonDecode(jsonData);
+        return ImagePost.fromJson(json);
+      }
+    }
+    return null;
+  }
 }
 
 class VideoPost extends Post {
@@ -36,6 +65,32 @@ class VideoPost extends Post {
       content: json['content'],
       videoUrl: json['videoUrl'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'author': author,
+      'content': content,
+      'videoUrl': videoUrl,
+    };
+  }
+
+  static Future<void> saveInstance(VideoPost videoPost) async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonData = jsonEncode(videoPost.toJson());
+    prefs.setString('videoPost', jsonData);
+  }
+
+  static Future<VideoPost?> readInstance() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('videoPost')) {
+      final jsonData = prefs.getString('videoPost');
+      if (jsonData != null) {
+        final json = jsonDecode(jsonData);
+        return VideoPost.fromJson(json);
+      }
+    }
+    return null;
   }
 }
 
