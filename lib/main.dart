@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Post {
-  final String author;
-  final String content;
+  String author;
+  String content;
 
   Post({required this.author, required this.content});
 }
 
 class ImagePost extends Post {
-  final String imageUrl;
+  late String imageUrl; // Updated to non-final
 
   ImagePost({required String author, required String content, required this.imageUrl})
       : super(author: author, content: content);
@@ -31,9 +31,9 @@ class ImagePost extends Post {
     };
   }
 
-  static Future<void> saveInstance(ImagePost imagePost) async {
+  Future<void> saveInstance() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonData = jsonEncode(imagePost.toJson());
+    final jsonData = jsonEncode(toJson());
     prefs.setString('imagePost', jsonData);
   }
 
@@ -48,10 +48,21 @@ class ImagePost extends Post {
     }
     return null;
   }
+
+  Future<void> editInstance(String author, String content, String imageUrl) async {
+    this.author = author;
+    this.content = content;
+    setImageUrl(imageUrl); // Set the new imageUrl
+    await saveInstance();
+  }
+
+  void setImageUrl(String url) {
+    imageUrl = url;
+  }
 }
 
 class VideoPost extends Post {
-  final String videoUrl;
+  late String videoUrl; // Updated to non-final
 
   VideoPost({required String author, required String content, required this.videoUrl})
       : super(author: author, content: content);
@@ -72,9 +83,9 @@ class VideoPost extends Post {
     };
   }
 
-  static Future<void> saveInstance(VideoPost videoPost) async {
+  Future<void> saveInstance() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonData = jsonEncode(videoPost.toJson());
+    final jsonData = jsonEncode(toJson());
     prefs.setString('videoPost', jsonData);
   }
 
@@ -88,6 +99,220 @@ class VideoPost extends Post {
       }
     }
     return null;
+  }
+
+  Future<void> editInstance(String author, String content, String videoUrl) async {
+    this.author = author;
+    this.content = content;
+    setVideoUrl(videoUrl); // Set the new videoUrl
+    await saveInstance();
+  }
+
+  void setVideoUrl(String url) {
+    videoUrl = url;
+  }
+}
+class ImagePostEditPage extends StatefulWidget {
+  const ImagePostEditPage({Key? key}) : super(key: key);
+
+  @override
+  _ImagePostEditPageState createState() => _ImagePostEditPageState();
+}
+
+class _ImagePostEditPageState extends State<ImagePostEditPage> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _authorController;
+  late TextEditingController _contentController;
+  late TextEditingController _imageUrlController;
+
+  @override
+  void initState() {
+    super.initState();
+    _authorController = TextEditingController();
+    _contentController = TextEditingController();
+    _imageUrlController = TextEditingController();
+    _loadImagePost();
+  }
+
+  Future<void> _loadImagePost() async {
+    ImagePost? imagePost = await ImagePost.readInstance();
+    if (imagePost != null) {
+      setState(() {
+        _authorController.text = imagePost.author;
+        _contentController.text = imagePost.content;
+        _imageUrlController.text = imagePost.imageUrl;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Edit Image Post')),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                controller: _authorController,
+                decoration: const InputDecoration(labelText: 'Author'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the author';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _contentController,
+                decoration: const InputDecoration(labelText: 'Content'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the content';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _imageUrlController,
+                decoration: const InputDecoration(labelText: 'Image URL'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the image URL';
+                  }
+                  return null;
+                },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ImagePost imagePost = ImagePost(
+                      author: _authorController.text,
+                      content: _contentController.text,
+                      imageUrl: _imageUrlController.text,
+                    );
+                    imagePost.editInstance(
+                      _authorController.text,
+                      _contentController.text,
+                      _imageUrlController.text,
+                    ).then((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Successfully saved!')),
+                      );
+                    });
+                  }
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class VideoPostEditPage extends StatefulWidget {
+  const VideoPostEditPage({Key? key}) : super(key: key);
+
+  @override
+  _VideoPostEditPageState createState() => _VideoPostEditPageState();
+}
+
+class _VideoPostEditPageState extends State<VideoPostEditPage> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _authorController;
+  late TextEditingController _contentController;
+  late TextEditingController _videoUrlController;
+
+  @override
+  void initState() {
+    super.initState();
+    _authorController = TextEditingController();
+    _contentController = TextEditingController();
+    _videoUrlController = TextEditingController();
+    _loadVideoPost();
+  }
+
+  Future<void> _loadVideoPost() async {
+    VideoPost? videoPost = await VideoPost.readInstance();
+    if (videoPost != null) {
+      setState(() {
+        _authorController.text = videoPost.author;
+        _contentController.text = videoPost.content;
+        _videoUrlController.text = videoPost.videoUrl;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Edit Video Post')),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                controller: _authorController,
+                decoration: const InputDecoration(labelText: 'Author'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the author';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _contentController,
+                decoration: const InputDecoration(labelText: 'Content'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the content';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _videoUrlController,
+                decoration: const InputDecoration(labelText: 'Video URL'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the video URL';
+                  }
+                  return null;
+                },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    VideoPost videoPost = VideoPost(
+                      author: _authorController.text,
+                      content: _contentController.text,
+                      videoUrl: _videoUrlController.text,
+                    );
+                    videoPost.editInstance(
+                      _authorController.text,
+                      _contentController.text,
+                      _videoUrlController.text,
+                    ).then((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Successfully saved!')),
+                      );
+                    });
+                  }
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -138,7 +363,7 @@ class MainPageState extends State<MainPage> {
   }
 
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: _pageOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -168,8 +393,8 @@ class FeedPage extends StatelessWidget {
             friendNumber: index + 1,
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => FriendChatPage(friendNumber: index + 1),
+               MaterialPageRoute(
+                builder:(context) => FriendChatPage(friendNumber: index + 1),
               ),
             ),
           );
