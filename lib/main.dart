@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 abstract class Post {
   final String author;
@@ -92,37 +92,11 @@ class VideoPost extends Post {
 }
 
 void main() async {
-  ImagePost imagePost = ImagePost(
-    author: 'Author1',
-    content: 'This is a sample post',
-    imageUrl: 'https://example.com/image.jpg',
-  );
-  await ImagePost.saveInstance(imagePost);
-  
-  ImagePost? loadedImagePost = await ImagePost.readInstance();
-  if (loadedImagePost != null) {
-    print('Loaded Image Post - Author: ${loadedImagePost.author}, Content: ${loadedImagePost.content}, Image URL: ${loadedImagePost.imageUrl}');
-  }
-
-  VideoPost videoPost = VideoPost(
-    author: 'Author2',
-    content: 'This is another sample post',
-    videoUrl: 'https://example.com/video.mp4',
-  );
-  await VideoPost.saveInstance(videoPost);
-
-  VideoPost? loadedVideoPost = await VideoPost.readInstance();
-  if (loadedVideoPost != null) {
-    print('Loaded Video Post - Author: ${loadedVideoPost.author}, Content: ${loadedVideoPost.content}, Video URL: ${loadedVideoPost.videoUrl}');
-  }
-}
-
-void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +116,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   MainPageState createState() => MainPageState();
@@ -164,7 +138,7 @@ class MainPageState extends State<MainPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+   Widget build(BuildContext context) {
     return Scaffold(
       body: _pageOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -181,7 +155,7 @@ class MainPageState extends State<MainPage> {
 }
 
 class FeedPage extends StatelessWidget {
-  const FeedPage({super.key});
+  const FeedPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +240,7 @@ class FriendListPage extends StatelessWidget {
 class FriendChatPage extends StatefulWidget {
   final int friendNumber;
 
-  const FriendChatPage({super.key, required this.friendNumber});
+  const FriendChatPage({Key? key, required this.friendNumber}) : super(key: key);
 
   @override
   FriendChatPageState createState() => FriendChatPageState();
@@ -303,6 +277,7 @@ class FriendChatPageState extends State<FriendChatPage> {
                 IconButton(
                   icon: const Icon(Icons.send),
                   onPressed: () {
+                    // Add the necessary logic for sending the message
                   },
                 ),
               ],
@@ -315,7 +290,7 @@ class FriendChatPageState extends State<FriendChatPage> {
 }
 
 class MyFilesPage extends StatelessWidget {
-  const MyFilesPage({super.key});
+  const MyFilesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -326,6 +301,7 @@ class MyFilesPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
+              // Add the necessary logic for adding files
             },
           ),
         ],
